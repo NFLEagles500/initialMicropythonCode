@@ -57,9 +57,7 @@ if dev == 'picow':
 
 #Start coding.  Blink added for example
 while True:
-    led.value(1)
-    sleep(5)
-    led.value(0)
+    led.toggle()
     sleep(1)
 
         
