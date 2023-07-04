@@ -23,13 +23,15 @@ def utcToLocal(type):
     #get the offset from timeapi.io, using your timezone
     response = urequests.get(envSecrets.timeApiUrl)
     localUtcOffset = response.json()['currentUtcOffset']['seconds']
-    localTime = localtime(time() - localUtcOffset)
+    localTime = localtime(time() + localUtcOffset)
     if type == 'time':
         return f'{localTime[3]:02d}:{localTime[4]:02d}:{localTime[5]:02d}'
     elif type == 'date':
         return f'{localTime[0]}/{localTime[1]}/{localTime[2]:02d}'
     else:
         return f'{localTime[0]}/{localTime[1]}/{localTime[2]:02d} {localTime[3]:02d}:{localTime[4]:02d}:{localTime[5]:02d}'
+
+hostname = ''
 
 def connect():
     #Connect to WLAN
@@ -55,6 +57,7 @@ if dev == 'picow':
     connect()
     try:
         ntptime.settime()
+        print(f'UTC: {localtime()}')
         print(f"{utcToLocal('datetime')}")
     except Exception as error:
         print(error)
@@ -62,5 +65,9 @@ if dev == 'picow':
 
 #Start coding.  Blink added for example
 while True:
-  led.toggle()
-  sleep(1)
+    try:
+      led.toggle()
+      sleep(1)
+    except:
+        led.value(0)
+        
