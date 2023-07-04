@@ -1,5 +1,6 @@
-#If you are using a Pico W, be sure to create the envSecrets.py with ssid, wifipsw, timeApiUrl.
-#timeApiUrl is 'https://timeapi.io/api/TimeZone/zone?timeZone={INSERT TIME ZONE HERE}'
+#If you are using a Pico W, be sure to create the envSecrets.py with hostname, ssid,
+#wifipsw, timeApiUrl. timeApiUrl is:
+# 'https://timeapi.io/api/TimeZone/zone?timeZone={INSERT TIME ZONE HERE}'
 
 from machine import Pin, UART, RTC
 from utime import sleep, sleep_ms, time, localtime
@@ -31,13 +32,11 @@ def utcToLocal(type):
     else:
         return f'{localTime[0]}/{localTime[1]}/{localTime[2]:02d} {localTime[3]:02d}:{localTime[4]:02d}:{localTime[5]:02d}'
 
-hostname = ''
-
 def connect():
     #Connect to WLAN
     while wlan.isconnected() == False:
         #Be sure to set {hostname} below
-        wlan.config(hostname=f'{hostname}')
+        wlan.config(hostname=f'{envSecrets.hostname}')
         wlan.active(True)
         wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
         iter = 1
@@ -57,7 +56,6 @@ if dev == 'picow':
     connect()
     try:
         ntptime.settime()
-        print(f'UTC: {localtime()}')
         print(f"{utcToLocal('datetime')}")
     except Exception as error:
         print(error)
