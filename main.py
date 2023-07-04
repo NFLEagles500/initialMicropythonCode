@@ -35,20 +35,14 @@ def utcToLocal(type):
 def connect():
     #Connect to WLAN
     while wlan.isconnected() == False:
+        wlan.disconnect()
         #Be sure to set {hostname} below
-        wlan.config(hostname=f'{envSecrets.hostname}')
         wlan.active(True)
         wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
-        iter = 1
         while wlan.isconnected() == False:
-            print(f'Not Connected...{iter}')
-            iter += 1
-            if iter == 10:
-                print('Reached max waiting for wifi')
-                break
+            print('Waiting for connection...')
             sleep(1)
-        ip = wlan.ifconfig()[0]
-        print(f'{network.hostname()} is connected on {ip}')
+        print(wlan.ifconfig())
 
 if dev == 'picow':
     wlan = network.WLAN(network.STA_IF)
