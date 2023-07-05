@@ -9,6 +9,27 @@ import envSecrets
 import ntptime
 import usys
 import uos
+import urequests
+
+# URL of the raw main.py file on GitHub
+github_url = 'https://raw.githubusercontent.com/NFLEagles500/initialMicropythonCode/main/main.py'
+
+def update_main_script():
+    response = urequests.get(github_url)
+    new_code = response.text
+    response.close()
+
+    # Check if the new code is different from the existing code
+    if new_code != open('main.py').read():
+        # Save the new main.py file
+        with open('main.py', 'w') as f:
+            f.write(new_code)
+
+        # Reset the Pico to apply the updated main.py
+        machine.reset()
+
+# Perform initial update on startup
+update_main_script()
 
 #Setting defaults depending on which pico
 devCheck = uos.uname()
@@ -19,6 +40,10 @@ else:
     dev = 'pico'
     led = Pin(25, Pin.OUT)
 led.value(0)
+
+def appLog(stringOfData):
+    with open('log.txt','a') as file:
+        file.write(f"{utcToLocal('datetime')} {stringOfData}\n")
 
 def utcToLocal(type):
     #get the offset from timeapi.io, using your timezone
@@ -43,6 +68,12 @@ def connect():
             print('Waiting for connection...')
             sleep(1)
         print(wlan.ifconfig())
+
+#Variables
+#If you need the output as your script runs, add appLog('String of data') throughout the script.
+#When you change verbose to True, appLog will send the data to a log.txt for you to evaluate after
+#execution and it will print to the console as well
+verbose = False
 
 if dev == 'picow':
     wlan = network.WLAN(network.STA_IF)
