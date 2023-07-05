@@ -51,17 +51,25 @@ def utcToLocal(type):
     else:
         return f'{localTime[0]}/{localTime[1]}/{localTime[2]:02d} {localTime[3]:02d}:{localTime[4]:02d}:{localTime[5]:02d}'
 
+wlan = network.WLAN(network.STA_IF)
+wlan.disconnect()
+
 def connect():
     #Connect to WLAN
     while wlan.isconnected() == False:
-        wlan.disconnect()
-        #Be sure to set {hostname} below
+        wlan.config(hostname='picotest')
         wlan.active(True)
         wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
+        iter = 1
         while wlan.isconnected() == False:
-            print('Waiting for connection...')
+            print(f'Not Connected...{iter}')
+            iter += 1
+            if iter == 10:
+                print('Reached max waiting for wifi')
+                break
             sleep(1)
-        print(wlan.ifconfig())
+        ip = wlan.ifconfig()[0]
+        print(f'{network.hostname()} is connected on {ip}')
 
 #Variables
 #If you need the output as your script runs, add appLog('String of data') throughout the script.
