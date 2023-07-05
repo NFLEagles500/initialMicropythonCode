@@ -11,9 +11,6 @@ import usys
 import uos
 import urequests
 
-# URL of the raw main.py file on GitHub
-github_url = 'https://raw.githubusercontent.com/NFLEagles500/initialMicropythonCode/main/main.py'
-
 def update_main_script():
     response = urequests.get(github_url)
     new_code = response.text
@@ -27,9 +24,6 @@ def update_main_script():
 
         # Reset the Pico to apply the updated main.py
         machine.reset()
-
-# Perform initial update on startup
-update_main_script()
 
 #Setting defaults depending on which pico
 devCheck = uos.uname()
@@ -74,11 +68,15 @@ def connect():
 #When you change verbose to True, appLog will send the data to a log.txt for you to evaluate after
 #execution and it will print to the console as well
 verbose = False
+# URL of the raw main.py file on GitHub
+github_url = 'https://raw.githubusercontent.com/NFLEagles500/initialMicropythonCode/main/main.py'
 
 if dev == 'picow':
     wlan = network.WLAN(network.STA_IF)
     wlan.disconnect()
     connect()
+    # Perform initial update on startup
+    update_main_script()
     try:
         ntptime.settime()
         print(f"{utcToLocal('datetime')}")
