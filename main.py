@@ -42,6 +42,7 @@ def appLog(stringOfData):
 
 def utcToLocal(type):
     #get the offset from timeapi.io, using your timezone
+    global localUtcOffset
     localTime = localtime(time() + localUtcOffset)
     if type == 'time':
         return f'{localTime[3]:02d}:{localTime[4]:02d}:{localTime[5]:02d}'
