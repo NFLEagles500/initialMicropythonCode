@@ -18,6 +18,7 @@ def update_main_script():
 
     # Check if the new code is different from the existing code
     if new_code != open('main.py').read():
+        print('Github code is different, updating...')
         # Save the new main.py file
         with open('main.py', 'w') as f:
             f.write(new_code)
