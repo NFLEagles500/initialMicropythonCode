@@ -57,17 +57,15 @@ wlan.disconnect()
 
 def connect():
     #Connect to WLAN
-    while wlan.isconnected() == False:
+        wlan = network.WLAN(network.STA_IF)
         #wlan.config(hostname='picotest')
+        sleep(1)
         wlan.active(True)
         wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
         iter = 1
         while wlan.isconnected() == False:
             print(f'Not Connected...{iter}')
             iter += 1
-            if iter == 10:
-                print('Reached max waiting for wifi')
-                break
             sleep(1)
         ip = wlan.ifconfig()[0]
         print(f'{network.hostname()} is connected on {ip}')
