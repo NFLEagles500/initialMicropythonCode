@@ -80,7 +80,6 @@ github_url = 'https://raw.githubusercontent.com/NFLEagles500/initialMicropythonC
 
 if dev == 'picow':
     wlan = network.WLAN(network.STA_IF)
-    wlan.disconnect()
     connect()
     # Perform initial update on startup
     update_main_script()
@@ -96,6 +95,6 @@ if dev == 'picow':
 #Start coding.  Blink added for example
 while True:
     led.toggle()
-    sleep(0.01)
+    sleep(0.02)
 
         
