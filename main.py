@@ -86,7 +86,6 @@ if dev == 'picow':
     update_main_script()
     try:
         ntptime.settime()
-        print(f"{utcToLocal('datetime')}")
         responseFromTimeapi = urequests.get(envSecrets.timeApiUrl)
         localUtcOffset = responseFromTimeapi.json()['currentUtcOffset']['seconds']
     except Exception as error:
