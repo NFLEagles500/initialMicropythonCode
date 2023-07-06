@@ -57,7 +57,7 @@ wlan.disconnect()
 def connect():
     #Connect to WLAN
     while wlan.isconnected() == False:
-        wlan.config(hostname='picotest')
+        #wlan.config(hostname='picotest')
         wlan.active(True)
         wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
         iter = 1
