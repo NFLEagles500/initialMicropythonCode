@@ -57,18 +57,22 @@ wlan.disconnect()
 
 def connect():
     #Connect to WLAN
-        wlan = network.WLAN(network.STA_IF)
-        #wlan.config(hostname='picotest')
+    wlan = network.WLAN(network.STA_IF)
+    wlan.disconnect()
+    wlan.config(hostname='picotest')
+    sleep(1)
+    wlan.active(True)
+    wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
+    iter = 1
+    while wlan.ifconfig()[0] == '0.0.0.0':
+        print(f'Not Connected...{iter}')
+        iter += 1
         sleep(1)
-        wlan.active(True)
-        wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
-        iter = 1
-        while wlan.isconnected() == False:
-            print(f'Not Connected...{iter}')
-            iter += 1
-            sleep(1)
-        ip = wlan.ifconfig()[0]
-        print(f'{network.hostname()} is connected on {ip}')
+        if iter == 10:
+            wlan.connect(envSecrets.ssid, envSecrets.wifipsw)
+            iter = 1
+    ip = wlan.ifconfig()[0]
+    print(f'{network.hostname()} is connected on {ip}')
 
 #Variables
 #If you need the output as your script runs, add appLog('String of data') throughout the script.
@@ -79,7 +83,6 @@ verbose = False
 github_url = 'https://raw.githubusercontent.com/NFLEagles500/initialMicropythonCode/main/main.py'
 
 if dev == 'picow':
-    wlan = network.WLAN(network.STA_IF)
     connect()
     # Perform initial update on startup
     update_main_script()
