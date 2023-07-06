@@ -38,11 +38,10 @@ led.value(0)
 def appLog(stringOfData):
     with open('log.txt','a') as file:
         file.write(f"{utcToLocal('datetime')} {stringOfData}\n")
+    print(f"{utcToLocal('datetime')} {stringOfData}")
 
 def utcToLocal(type):
     #get the offset from timeapi.io, using your timezone
-    response = urequests.get(envSecrets.timeApiUrl)
-    localUtcOffset = response.json()['currentUtcOffset']['seconds']
     localTime = localtime(time() + localUtcOffset)
     if type == 'time':
         return f'{localTime[3]:02d}:{localTime[4]:02d}:{localTime[5]:02d}'
@@ -88,8 +87,10 @@ if dev == 'picow':
     try:
         ntptime.settime()
         print(f"{utcToLocal('datetime')}")
+        responseFromTimeapi = urequests.get(envSecrets.timeApiUrl)
+        localUtcOffset = responseFromTimeapi.json()['currentUtcOffset']['seconds']
     except Exception as error:
-        print(error)
+        appLog(error)
         pass
 
 #Start coding.  Blink added for example
