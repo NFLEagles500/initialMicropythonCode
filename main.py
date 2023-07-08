@@ -95,12 +95,13 @@ if dev == 'picow':
         ntptime.settime()
         responseFromTimeapi = urequests.get(envSecrets.timeApiUrl)
         localUtcOffset = responseFromTimeapi.json()['currentUtcOffset']['seconds']
+        responseFromTimeapi.close()
     except Exception as error:
         appLog(error)
 
 #Start coding.  Blink added for example
 while True:
     led.toggle()
-    sleep(0.7)
+    sleep(2)
 
         
