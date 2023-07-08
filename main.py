@@ -38,8 +38,13 @@ led.value(0)
 
 def appLog(stringOfData):
     with open('log.txt','a') as file:
-        file.write(f"{utcToLocal('datetime')} {stringOfData}\n")
-    print(f"{utcToLocal('datetime')} {stringOfData}")
+        if type(stringOfData) == str:
+            file.write(f"{utcToLocal('datetime')} {stringOfData}\n")
+            print(f"{utcToLocal('datetime')} {stringOfData}")
+        else:
+            file.write(f"{utcToLocal('datetime')} --- Traceback begin ---\n")
+            usys.print_exception(stringOfData,file)
+            file.write(f"{utcToLocal('datetime')} --- Traceback end ---\n")
 
 def utcToLocal(type):
     #get the offset from timeapi.io, using your timezone
@@ -92,7 +97,6 @@ if dev == 'picow':
         localUtcOffset = responseFromTimeapi.json()['currentUtcOffset']['seconds']
     except Exception as error:
         appLog(error)
-        pass
 
 #Start coding.  Blink added for example
 while True:
