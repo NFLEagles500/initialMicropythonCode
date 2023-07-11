@@ -11,6 +11,9 @@ import usys
 import uos
 import urequests
 
+#Allow time to interrupt main.py
+sleep(5)
+
 def update_main_script():
     response = urequests.get(github_url)
     new_code = response.text
